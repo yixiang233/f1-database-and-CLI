@@ -1,7 +1,7 @@
 import argparse
 import psycopg2
 
-# 显示菜单
+# show menu
 def show_menu():
     print("\nWelcome to the Formula 1 World Championship Driver Database!\n")
     print("Please select an option:")
@@ -17,7 +17,7 @@ def show_menu():
     print("10. Delete all related data for a driver")
     print("11. Exit")
 
-# 处理用户选择
+# handle user's choice
 def handle_choice(choice):
     if choice == '1':
         insert_data()
@@ -45,7 +45,7 @@ def handle_choice(choice):
     else:
         print("Invalid choice!")
 
-# 连接到数据库
+# connect to database
 def connect_to_database():
     try:
         conn = psycopg2.connect(
@@ -59,7 +59,7 @@ def connect_to_database():
     except psycopg2.Error as e:
         print("Error connecting to database:", e)
 
-# 关闭数据库连接
+# close database connection
 def close_connection(conn, cur=None):
     try:
         if cur:
@@ -69,10 +69,10 @@ def close_connection(conn, cur=None):
         print("Error closing database connection:", e)
 
 
-# 插入数据
+# insert data
 def insert_data():
     try:
-        # 连接到数据库
+        # connect to database
         conn = psycopg2.connect(
             dbname='f1',
             user='postgres',
@@ -81,10 +81,10 @@ def insert_data():
             port='5432'
         )
         
-        # 获取数据库游标
+        # get database cursor
         cur = conn.cursor()
         
-        # 接收用户输入
+        # receive the user's input
         driverId = input("Enter driver id: ")
         driverRef = input("Enter reference name: ")
         forename = input("Enter first name: ")
@@ -93,11 +93,11 @@ def insert_data():
         nationality = input("Enter nationality: ")
         url = input("Enter Wikipedia URL: ")
         
-        # 执行插入操作
+        # execute insert operation
         cur.execute("INSERT INTO drivers (driverId, driverRef, forename, surname, dob, nationality, url) VALUES (%s, %s, %s, %s, %s, %s, %s)",
                     (driverId, driverRef, forename, surname, dob, nationality, url))
         
-        # 提交事务
+        # commit transaction
         conn.commit()
         
         print("Data inserted successfully!")
@@ -106,16 +106,16 @@ def insert_data():
         print("Error inserting data:", e)
         
     finally:
-        # 关闭游标和连接
+        # close curcor and connection
         if 'cur' in locals():
             cur.close()
         if 'conn' in locals():
             conn.close()
 
-# 删除数据
+# delete data
 def delete_data():
     try:
-        # 连接到数据库
+        # connect to database
         conn = psycopg2.connect(
             dbname='f1',
             user='postgres',
@@ -124,16 +124,16 @@ def delete_data():
             port='5432'
         )
         
-        # 获取数据库游标
+        # get database cursor
         cur = conn.cursor()
         
-        # 接收用户输入
+        # receive the user's input
         driverId = input("Enter driver ID to delete: ")
         
-        # 执行删除操作
+        # execute delete operation
         cur.execute("DELETE FROM drivers WHERE driverId = %s", (driverId,))
         
-        # 提交事务
+        # commit transaction
         conn.commit()
         
         print("Data deleted successfully!")
@@ -142,16 +142,16 @@ def delete_data():
         print("Error deleting data:", e)
         
     finally:
-        # 关闭游标和连接
+        # close curcor and connection
         if 'cur' in locals():
             cur.close()
         if 'conn' in locals():
             conn.close()
 
-# 更新数据
+# update data
 def update_data():
     try:
-        # 连接到数据库
+        # connect to database
         conn = psycopg2.connect(
             dbname='f1',
             user='postgres',
@@ -160,18 +160,18 @@ def update_data():
             port='5432'
         )
         
-        # 获取数据库游标
+        # get database cursor
         cur = conn.cursor()
         
-        # 接收用户输入
+        # receive user input
         driverId = input("Enter driver ID to update: ")
         attribute = input("Enter attribute to update (driverRef (reference name), forename (first name), surname (last name), dob (date of birth), nationality, url): ")
         new_value = input(f"Enter new value for {attribute}: ")
         
-        # 执行更新操作
+        # execute update operation
         cur.execute(f"UPDATE drivers SET {attribute} = %s WHERE driverId = %s", (new_value, driverId))
         
-        # 提交事务
+        # commit transaction
         conn.commit()
         
         print("Data updated successfully!")
@@ -180,16 +180,16 @@ def update_data():
         print("Error updating data:", e)
         
     finally:
-        # 关闭游标和连接
+        # Close the cursor and connection
         if 'cur' in locals():
             cur.close()
         if 'conn' in locals():
             conn.close()
 
-# 搜索数据
+# search data
 def search_data():
     try:
-        # 连接到数据库
+        # connect to database
         conn = psycopg2.connect(
             dbname='f1',
             user='postgres',
@@ -198,16 +198,16 @@ def search_data():
             port='5432'
         )
         
-        # 获取数据库游标
+        # get database cursor
         cur = conn.cursor()
         
-        # 接收用户输入
+        # receive the user's input
         driverId = input("Enter driver ID to search: ")
         
-        # 执行搜索操作
+        # execute search operation
         cur.execute("SELECT * FROM drivers WHERE driverId = %s", (driverId,))
         
-        # 获取搜索结果
+        # get the searching result
         result = cur.fetchone()
         
         if result:
@@ -226,16 +226,16 @@ def search_data():
         print("Error searching data:", e)
         
     finally:
-        # 关闭游标和连接
+        # close curcor and connection
         if 'cur' in locals():
             cur.close()
         if 'conn' in locals():
             conn.close()
 
-# 聚合函数
+# aggregate functions
 def aggregate_functions():
     try:
-        # 连接到数据库
+        # connect to database
         conn = psycopg2.connect(
             dbname='f1',
             user='postgres',
@@ -244,13 +244,13 @@ def aggregate_functions():
             port='5432'
         )
         
-        # 获取数据库游标
+        # get database cursor
         cur = conn.cursor()
         
-        # 执行聚合函数操作
+        # execute aggregate functions operation
         cur.execute("SELECT COUNT(*) FROM drivers")
         
-        # 获取查询结果
+        # get the searching result
         result = cur.fetchone()
         
         if result:
@@ -263,16 +263,16 @@ def aggregate_functions():
         print("Error executing aggregate function:", e)
         
     finally:
-        # 关闭游标和连接
+        # close curcor and connection
         if 'cur' in locals():
             cur.close()
         if 'conn' in locals():
             conn.close()
 
-# 排序
+# sorting
 def sorting():
     try:
-        # 连接到数据库
+        # connect to database
         conn = psycopg2.connect(
             dbname='f1',
             user='postgres',
@@ -281,13 +281,13 @@ def sorting():
             port='5432'
         )
         
-        # 获取数据库游标
+        # get database cursor
         cur = conn.cursor()
         
-        # 执行排序操作
+        # execute sorting operation
         cur.execute("SELECT forename, surname FROM drivers ORDER BY surname")
         
-        # 获取查询结果
+        # get the searching result
         results = cur.fetchall()
         
         if results:
@@ -302,29 +302,29 @@ def sorting():
         print("Error executing sorting function:", e)
         
     finally:
-        # 关闭游标和连接
+        # close curcor and connection
         if 'cur' in locals():
             cur.close()
         if 'conn' in locals():
             conn.close()
 
-# 连接
+# joins
 def joins():
     try:
-        # 连接到数据库
+        # connect to database
         conn = connect_to_database()
         
-        # 获取数据库游标
+        # get database cursor
         cur = conn.cursor()
         
-        # 执行联接操作
+        # execute 联接operation
         cur.execute("""
             SELECT drivers.driverId, drivers.forename, drivers.surname, driver_standings.points
             FROM drivers
             INNER JOIN driver_standings ON drivers.driverId = driver_standings.driverId
         """)
         
-        # 获取查询结果
+        # get the searching result
         results = cur.fetchall()
         
         if results:
@@ -340,26 +340,26 @@ def joins():
         print("Error executing join operation:", e)
         
     finally:
-        # 关闭数据库连接
+        # close database connection
         close_connection(conn, cur)
 
-# 分组
+# grouping
 def grouping():
     try:
-        # 连接到数据库
+        # connect to database
         conn = connect_to_database()
         
-        # 获取数据库游标
+        # get database cursor
         cur = conn.cursor()
         
-        # 执行分组操作
+        # execute grouping operation
         cur.execute("""
             SELECT nationality, COUNT(*) 
             FROM drivers 
             GROUP BY nationality
         """)
         
-        # 获取查询结果
+        # get the searching result
         results = cur.fetchall()
         
         if results:
@@ -375,19 +375,19 @@ def grouping():
         print("Error executing grouping operation:", e)
         
     finally:
-        # 关闭数据库连接
+        # close database connection
         close_connection(conn, cur)
 
-# 子查询
+# subqueries
 def subqueries():
     try:
-        # 连接到数据库
+        # connect to database
         conn = connect_to_database()
         
-        # 获取数据库游标
+        # get database cursor
         cur = conn.cursor()
         
-        # 执行子查询操作
+        # execute subqueries operation
         cur.execute("""
             SELECT drivers.driverId, drivers.forename, drivers.surname, driver_standings.points
             FROM drivers
@@ -395,7 +395,7 @@ def subqueries():
             WHERE driver_standings.points >= 90
         """)
         
-        # 获取查询结果
+        # get the searching result
         results = cur.fetchall()
         
         if results:
@@ -411,10 +411,10 @@ def subqueries():
         print("Error executing subquery operation:", e)
         
     finally:
-        # 关闭数据库连接
+        # close database connection
         close_connection(conn, cur)
 
-# 根据 driverId 删除 drivers 表中的数据
+# delete the data in 'drivers' base on driverId
 def delete_from_drivers(driverId, cur):
     try:
         cur.execute("DELETE FROM drivers WHERE driverId = %s", (driverId,))
@@ -422,7 +422,7 @@ def delete_from_drivers(driverId, cur):
         print("Error deleting from drivers table:", e)
         raise e
 
-# 根据 driverId 删除 driver_standings 表中的数据
+# delete the data in 'driver_standings' base on 'driverId'
 def delete_from_driver_standings(driverId, cur):
     try:
         cur.execute("DELETE FROM driver_standings WHERE driverId = %s", (driverId,))
@@ -430,41 +430,41 @@ def delete_from_driver_standings(driverId, cur):
         print("Error deleting from driver_standings table:", e)
         raise e
     
-# 事务
+# transactions
 def transactions():
     try:
-        # 连接到数据库
+        # connect to database
         conn = connect_to_database()
         
-        # 获取数据库游标
+        # Gets the database cursor
         cur = conn.cursor()
         
         driverId = input("Enter driver ID to delete all related data: ") 
 
-        # 开始事务
+        # execute transaction
         cur.execute("BEGIN TRANSACTION;")
         
-        # 删除 drivers 表中的数据
+        # delete the data in 'drivers'
         delete_from_drivers(driverId, cur)
         
-        # 删除 driver_standings 表中的数据
+        # delete the data in the 'driver_standings' table
         delete_from_driver_standings(driverId, cur)
         
-        # 提交事务
+        # commit transaction
         conn.commit()
         print("Related data deleted successfully.")
         
     except psycopg2.Error as e:
         print("Error executing transaction:", e)
         
-        # 回滚事务
+        # rollback transaction
         conn.rollback()
         
     finally:
-        # 关闭数据库连接
+        # close database connection
         close_connection(conn, cur)
 
-# 主函数
+# main function
 def main():
     while True:
         show_menu()
