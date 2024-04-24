@@ -444,12 +444,12 @@ def transactions():
         # execute transaction
         cur.execute("BEGIN TRANSACTION;")
         
-        # delete the data in 'drivers'
-        delete_from_drivers(driverId, cur)
-        
         # delete the data in the 'driver_standings' table
         delete_from_driver_standings(driverId, cur)
         
+        # delete the data in 'drivers'
+        delete_from_drivers(driverId, cur)
+
         # commit transaction
         conn.commit()
         print("Related data deleted successfully.")
